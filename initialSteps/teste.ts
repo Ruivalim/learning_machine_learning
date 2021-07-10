@@ -4,10 +4,10 @@ import NeuronNetwork from './NeuronNetwork';
 const nn = new NeuronNetwork(2, 0.1, 10000);
 
 const trainData = [
-  [-2, -1],
-  [25, 6],
-  [17, 4],
-  [-15, -6],
+    [-2, -1],
+    [25, 6],
+    [17, 4],
+    [-15, -6],
 ];
 
 const rights = [1, 0, 0, 1];
