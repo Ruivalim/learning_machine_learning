@@ -4,18 +4,21 @@ import { calculateLoss, derivSigmoid, normalDistribution } from './uteis';
 export default class NeuronNetwork {
   private learnRate = 0.1;
 
-  private epochs = 1000;
+  private ticks = 1000;
 
   private neurons: Neuron[] = [];
 
   private output: Neuron;
 
-  constructor(neuronsNumber: number) {
+  constructor(neuronsNumber: number, learnRate: number, ticks: number) {
     for (let y = 0; y < neuronsNumber; y += 1) {
       this.neurons.push(new Neuron());
     }
 
     this.output = new Neuron();
+
+    this.ticks = ticks;
+    this.learnRate = learnRate;
   }
 
   feedForward(input: number[]): number {
@@ -34,7 +37,7 @@ export default class NeuronNetwork {
       throw new Error('Generic error 1');
     }
 
-    for (let epoch = 0; epoch < this.epochs; epoch += 1) {
+    for (let epoch = 0; epoch < this.ticks; epoch += 1) {
       data.forEach((input, index) => {
         this.tick(input, right[index]);
       });
@@ -43,6 +46,7 @@ export default class NeuronNetwork {
         const preds: number[] = [];
         data.forEach(item => preds.push(this.feedForward(item)));
         const loss = calculateLoss(right, preds);
+        console.log(`Loss at ${loss}`);
       }
     }
   }

@@ -1,6 +1,7 @@
 import NeuronNetwork from './NeuronNetwork';
 
-const nn = new NeuronNetwork(3);
+//  One neuron for each parameter in the trainData;
+const nn = new NeuronNetwork(2, 0.1, 10000);
 
 const trainData = [
   [-2, -1],
@@ -13,10 +14,10 @@ const rights = [1, 0, 0, 1];
 
 nn.train(trainData, rights);
 
-const teste = nn.feedForward([20, 2]);
+const male = nn.feedForward([20, 2]); // Should be closer to 0
 
-console.log(teste);
+console.log(male);
 
-const teste2 = nn.feedForward([-7, -3]);
+const female = nn.feedForward([-7, -3]); // Should be closer to 1
 
-console.log(teste2);
+console.log(female);
