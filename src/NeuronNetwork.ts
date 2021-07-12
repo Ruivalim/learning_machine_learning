@@ -1,5 +1,10 @@
 import Neuron from './Neuron';
-import { calculateLoss, derivSigmoid, normalDistribution } from './helpers';
+import { calculateLoss, derivSigmoid } from './helpers';
+
+interface NeuroExport {
+    w: number[];
+    b: number;
+}
 
 export default class NeuronNetwork {
     private learnRate = 0.1;
@@ -12,15 +17,17 @@ export default class NeuronNetwork {
 
     public showLoss = false;
 
-    constructor(schema: number[], learnRate?: number, iterations?: number) {
-        for (let y = 0; y < schema[0]; y += 1) {
-            this.layers.push([]);
-            for (let x = 0; x < schema[1]; x += 1) {
-                this.layers[y].push(Neuron.generateRandomNeuron(schema[1]));
+    constructor(schema?: number[], learnRate?: number, iterations?: number) {
+        if (schema) {
+            for (let y = 0; y < schema[0]; y += 1) {
+                this.layers.push([]);
+                for (let x = 0; x < schema[1]; x += 1) {
+                    this.layers[y].push(Neuron.generateRandomNeuron(schema[1]));
+                }
             }
-        }
 
-        this.output = Neuron.generateRandomNeuron(schema[1]);
+            this.output = Neuron.generateRandomNeuron(schema[1]);
+        }
 
         if (iterations) {
             this.iterations = iterations;
@@ -111,5 +118,49 @@ export default class NeuronNetwork {
         this.output.setWeights(outputNewWeights);
 
         this.output.setBias(this.output.bias - this.learnRate * partialDerivative * derivSigmoid(output));
+    }
+
+    save(): NeuroExport[][] {
+        const minimalData: NeuroExport[][] = [];
+
+        this.layers.forEach((layer, layerIndex) => {
+            minimalData[layerIndex] = [];
+            layer.forEach(neuron => {
+                const neuronData: NeuroExport = {
+                    w: neuron.weights,
+                    b: neuron.bias,
+                };
+                minimalData[layerIndex].push(neuronData);
+            });
+        });
+
+        minimalData.push([
+            {
+                w: this.output.weights,
+                b: this.output.bias,
+            },
+        ]);
+
+        return minimalData;
+    }
+
+    load(data: NeuroExport[][]): void {
+        data.forEach((item, itemIndex) => {
+            const layer: Neuron[] = [];
+            item.forEach(neuron => {
+                const newNeuron = new Neuron();
+                newNeuron.setWeights(neuron.w);
+                newNeuron.setBias(neuron.b);
+
+                if (itemIndex + 1 === data.length) {
+                    this.output = newNeuron;
+                } else {
+                    layer.push(newNeuron);
+                }
+            });
+            if (layer.length > 0) {
+                this.layers.push(layer);
+            }
+        });
     }
 }

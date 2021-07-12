@@ -1,6 +1,6 @@
 import NeuronNetwork from './NeuronNetwork';
 
-const nn = new NeuronNetwork([5, 2], 0.1, 100000);
+const nn = new NeuronNetwork([5, 2, 5], 0.1, 100000);
 
 const trainData = [
     [-2, -1],
@@ -11,6 +11,11 @@ const trainData = [
 
 const answers = [1, 0, 0, 1];
 nn.train(trainData, answers);
+
+const trainedParams = nn.save();
+console.log(trainedParams);
+// Loading saved params
+// nn.load(trainedParams)
 
 const male = nn.feedForward([20, 2]);
 console.log('Should be closer to 0: ', male);
