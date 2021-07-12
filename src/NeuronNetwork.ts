@@ -1,7 +1,7 @@
 import Neuron from './Neuron';
 import { calculateLoss, derivSigmoid } from './helpers';
 
-interface NeuroExport {
+interface NeuronExport {
     w: number[];
     b: number;
 }
@@ -93,7 +93,7 @@ export default class NeuronNetwork {
             neurons.forEach((neuron, neuronIndex) => {
                 const newWeights: number[] = [];
 
-                neuron.weights.forEach((weight, i) => {
+                neuron.weights.forEach(weight => {
                     const w = input[neuronIndex] * derivSigmoid(layerResults[layerIndex][neuronIndex]);
                     newWeights.push(weight - this.learnRate * partialDerivative * (this.output.weights[neuronIndex] * derivSigmoid(output) * w));
                 });
@@ -120,13 +120,13 @@ export default class NeuronNetwork {
         this.output.setBias(this.output.bias - this.learnRate * partialDerivative * derivSigmoid(output));
     }
 
-    save(): NeuroExport[][] {
-        const minimalData: NeuroExport[][] = [];
+    save(): NeuronExport[][] {
+        const minimalData: NeuronExport[][] = [];
 
         this.layers.forEach((layer, layerIndex) => {
             minimalData[layerIndex] = [];
             layer.forEach(neuron => {
-                const neuronData: NeuroExport = {
+                const neuronData: NeuronExport = {
                     w: neuron.weights,
                     b: neuron.bias,
                 };
@@ -144,7 +144,7 @@ export default class NeuronNetwork {
         return minimalData;
     }
 
-    load(data: NeuroExport[][]): void {
+    load(data: NeuronExport[][]): void {
         data.forEach((item, itemIndex) => {
             const layer: Neuron[] = [];
             item.forEach(neuron => {

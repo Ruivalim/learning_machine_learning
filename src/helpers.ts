@@ -1,6 +1,6 @@
-export const average = (array: number[]) => array.reduce((a, b) => a + b) / array.length;
+export const average = (array: number[]): number => array.reduce((a, b) => a + b) / array.length;
 
-export const sigmoid = (x: number) => {
+export const sigmoid = (x: number): number => {
     return 1 / (1 + Math.E ** -x);
 };
 
@@ -18,7 +18,7 @@ export const calculateLoss = (rightValues: number[], predValues: number[]): numb
     return average(numbers);
 };
 
-export const derivSigmoid = (x: number) => {
+export const derivSigmoid = (x: number): number => {
     const fx = sigmoid(x);
     return fx * (1 - fx);
 };
