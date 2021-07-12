@@ -1,4 +1,4 @@
-import { sigmoid } from './uteis';
+import { normalDistribution, sigmoid } from './helpers';
 
 export default class Neuron {
     public weights: number[] = [];
@@ -27,5 +27,17 @@ export default class Neuron {
         total += this.bias;
 
         return sigmoid(total);
+    }
+
+    static generateRandomNeuron(connections: number, bias?: number): Neuron {
+        const neuron = new Neuron();
+        neuron.setBias(bias ?? normalDistribution());
+        const weights: number[] = [];
+        for (let y = 0; y < connections; y += 1) {
+            weights.push(normalDistribution());
+        }
+        neuron.setWeights(weights);
+
+        return neuron;
     }
 }
